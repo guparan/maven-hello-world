@@ -12,7 +12,7 @@ pipeline {
             parallel {                
                 stage('Build the Maven project') {
                     steps {
-                        sh "mvn clean install package"
+                        sh "mvn clean package"
                         archiveArtifacts artifacts: '**/*.war', followSymlinks: false
                     }
                 }
