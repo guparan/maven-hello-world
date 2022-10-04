@@ -1,12 +1,13 @@
 pipeline {
-    agent any
-  tools {
+    agent any	
+	tools {
         maven "Maven 3.6.3"
-    }
-  options {
+    }	
+	options {
         parallelsAlwaysFailFast()
-    }
+    }    
     stages {
+    
         stage('Parallel Stage') {
             parallel {                
                 stage('Build the Maven project') {
@@ -54,5 +55,5 @@ pipeline {
             }
         }
 
-    }
-}
+    } // stages
+} // pipeline
