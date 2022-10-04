@@ -28,7 +28,24 @@ pipeline {
         
         stage('Publish war file to Nexus') {
             steps {
-                nexusPublisher nexusInstanceId: 'Nexus', nexusRepositoryId: 'maven-releases', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: 'webapp/target/webapp.war']], mavenCoordinate: [artifactId: 'maven-project', groupId: 'com.example.maven-project', packaging: 'war', version: '1.1']]]
+                nexusPublisher(
+                    nexusInstanceId: 'Nexus', 
+                    nexusRepositoryId: 'maven-releases', 
+                    packages: [[
+                        $class: 'MavenPackage', 
+                        mavenAssetList: [[
+                            classifier: '', 
+                            extension: '', 
+                            filePath: 'webapp/target/webapp.war'
+                        ]], 
+                        mavenCoordinate: [
+                            artifactId: 'maven-project', 
+                            groupId: 'com.example.maven-project', 
+                            packaging: 'war', 
+                            version: '1.1'
+                        ]
+                    ]]
+                )
             }
         }
         
