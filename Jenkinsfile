@@ -22,7 +22,7 @@ pipeline {
                 stage('Trigger SonarQube') {
                     steps {
                         withSonarQubeEnv('SonarQube') {
-                            sh "mvn clean package sonar:sonar -Dsonar.host_url=$SONAR_HOST_URL"
+                            sh "mvn sonar:sonar -Dsonar.host_url=$SONAR_HOST_URL"
                         }
                     }
                 }
