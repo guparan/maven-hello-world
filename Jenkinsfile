@@ -11,7 +11,6 @@ pipeline {
             parallel {                
                 stage('Build the Maven project') {
                     steps {
-                        git 'https://github.com/crunchy-devops/hello-world.git'
                         sh "mvn clean install package"
                         archiveArtifacts artifacts: '**/*.war', followSymlinks: false
                     }
@@ -34,9 +33,11 @@ pipeline {
         
         stage('Build Docker image') {
             steps {
-                sh "rm -Rf webapp.war && \
-                    wget http://nexus:8081/repository/maven-releases/com/example/maven-project/maven-project/1.1/maven-project-1.1.war -O ${WORKSPACE}/webapp.war && \
-                    docker build -t hello-world-afip:latest ."
+                sh(script: '''
+                    rm -Rf webapp.war
+                    wget http://nexus:8081/repository/maven-releases/com/example/maven-project/maven-project/1.1/maven-project-1.1.war -O ${WORKSPACE}/webapp.war
+                    docker build -t hello-world-afip:latest .
+                '''
             }
         }
         
