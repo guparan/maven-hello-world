@@ -13,13 +13,16 @@ pipeline {
                 stage('Build the Maven project') {
                     steps {
                         sh "mvn clean package"
-                        archiveArtifacts artifacts: '**/*.war', followSymlinks: false
+                        archiveArtifacts(
+                            artifacts: '**/*.war', 
+                            followSymlinks: false
+                        )
                     }
                 }
                 stage('Trigger SonarQube') {
                     steps {
                         withSonarQubeEnv('SonarQube') {
-                            sh "mvn clean package sonar:sonar -Dsonar.host_url=$SONAR_HOST_URL "
+                            sh "mvn clean package sonar:sonar -Dsonar.host_url=$SONAR_HOST_URL"
                         }
                     }
                 }
@@ -53,7 +56,8 @@ pipeline {
             steps {
                 sh '''
                     rm -Rf webapp.war
-                    wget http://nexus:8081/repository/maven-releases/com/example/maven-project/maven-project/1.1/maven-project-1.1.war -O ${WORKSPACE}/webapp.war
+                    wget http://nexus:8081/repository/maven-releases/com/example/maven-project/maven-project/1.1/maven-project-1.1.war \
+                        -O ${WORKSPACE}/webapp.war
                     docker build -t hello-world-afip:latest .
                 '''
             }
