@@ -53,7 +53,7 @@ pipeline {
                                     artifactId: 'maven-project', 
                                     groupId: 'com.example.maven-project', 
                                     packaging: 'war', 
-                                    version: '1.1'
+                                    version: '1.4'
                                 ]
                             ]]
                         )
