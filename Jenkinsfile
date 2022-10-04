@@ -50,7 +50,7 @@ pipeline {
                         docker rm -f $OLD
                     fi
                     docker run -d --name hello-world-run -p 18090:8080 hello-world-afip
-                ''')
+                '''
             }
         }
 
