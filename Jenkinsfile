@@ -8,24 +8,26 @@ pipeline {
     }    
     stages {
     
-        parallel {                
-            stage('Build the Maven project') {
-                steps {
-                    sh "mvn clean package"
-                    archiveArtifacts(
-                        artifacts: '**/*.war', 
-                        followSymlinks: false
-                    )
-                }
-            }
-            stage('Trigger SonarQube') {
-                steps {
-                    withSonarQubeEnv('SonarQube') {
-                        sh "mvn clean package sonar:sonar -Dsonar.host_url=$SONAR_HOST_URL"
+        stage('Parallel Stage') {
+            parallel {                
+                stage('Build the Maven project') {
+                    steps {
+                        sh "mvn clean package"
+                        archiveArtifacts(
+                            artifacts: '**/*.war', 
+                            followSymlinks: false
+                        )
                     }
                 }
-            }
-        } // parallel
+                stage('Trigger SonarQube') {
+                    steps {
+                        withSonarQubeEnv('SonarQube') {
+                            sh "mvn clean package sonar:sonar -Dsonar.host_url=$SONAR_HOST_URL"
+                        }
+                    }
+                }
+            } // parallel
+        } // stage('Parallel Stage')
         
         stage('Publish war file to Nexus') {
             steps {
