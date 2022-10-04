@@ -8,7 +8,7 @@ pipeline {
     }    
     stages {
     
-        stage('Parallel stage') {
+        stage('Parallel stage 1') {
             parallel {
                 stage('Build the Maven project') {
                     steps {
@@ -27,9 +27,9 @@ pipeline {
                     }
                 }
             } // parallel
-        } // stage('Parallel stage')
+        } // stage('Parallel stage 1')
         
-        stage('Parallel stage') {
+        stage('Parallel stage 2') {
             parallel {
                 stage('Publish war file to Nexus') {
                     steps {
@@ -64,7 +64,7 @@ pipeline {
                     }
                 }
             } // parallel
-        } // stage('Parallel stage')
+        } // stage('Parallel stage 2')
         
         stage('Run Docker container') {
             steps {
