@@ -7,12 +7,18 @@ pipeline {
         parallelsAlwaysFailFast()
     }    
     stages {
+        
+        stage('Clean the Maven project') {
+            steps {
+                sh "mvn clean"
+            }
+        }
     
         stage('Parallel stage 1') {
             parallel {
                 stage('Build the Maven project') {
                     steps {
-                        sh "mvn clean package"
+                        sh "mvn package"
                         archiveArtifacts(
                             artifacts: '**/*.war', 
                             followSymlinks: false
@@ -31,7 +37,7 @@ pipeline {
         
         stage('Parallel stage 2') {
             parallel {
-                stage('Publish war file to Nexus') {
+                stage('Push webapp to Nexus') {
                     steps {
                         nexusPublisher(
                             nexusInstanceId: 'Nexus', 
@@ -54,7 +60,7 @@ pipeline {
                     }
                 }
         
-                stage('Build Docker image') {
+                stage('Push webapp to new Docker image') {
                     steps {
                         sh '''
                             rm -Rf webapp.war
@@ -66,7 +72,7 @@ pipeline {
             } // parallel
         } // stage('Parallel stage 2')
         
-        stage('Run Docker container') {
+        stage('Run Docker container based on new image') {
             steps {
                 sh '''
                     CONTAINER_NAME="hello-world-run"
