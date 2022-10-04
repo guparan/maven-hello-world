@@ -60,7 +60,7 @@ pipeline {
                     }
                 }
         
-                stage('Push webapp to new Docker image') {
+                stage('Create new Docker image for webapp') {
                     steps {
                         sh '''
                             rm -Rf webapp.war
