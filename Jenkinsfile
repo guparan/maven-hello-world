@@ -8,8 +8,8 @@ pipeline {
     }    
     stages {
     
-        stage('Parallel Stage') {
-            parallel {                
+        stage('Parallel stage') {
+            parallel {
                 stage('Build the Maven project') {
                     steps {
                         sh "mvn clean package"
@@ -27,41 +27,44 @@ pipeline {
                     }
                 }
             } // parallel
-        } // stage('Parallel Stage')
+        } // stage('Parallel stage')
         
-        stage('Publish war file to Nexus') {
-            steps {
-                nexusPublisher(
-                    nexusInstanceId: 'Nexus', 
-                    nexusRepositoryId: 'maven-releases', 
-                    packages: [[
-                        $class: 'MavenPackage', 
-                        mavenAssetList: [[
-                            classifier: '', 
-                            extension: '', 
-                            filePath: 'webapp/target/webapp.war'
-                        ]], 
-                        mavenCoordinate: [
-                            artifactId: 'maven-project', 
-                            groupId: 'com.example.maven-project', 
-                            packaging: 'war', 
-                            version: '1.1'
-                        ]
-                    ]]
-                )
-            }
-        }
+        stage('Parallel stage') {
+            parallel {
+                stage('Publish war file to Nexus') {
+                    steps {
+                        nexusPublisher(
+                            nexusInstanceId: 'Nexus', 
+                            nexusRepositoryId: 'maven-releases', 
+                            packages: [[
+                                $class: 'MavenPackage', 
+                                mavenAssetList: [[
+                                    classifier: '', 
+                                    extension: '', 
+                                    filePath: 'webapp/target/webapp.war'
+                                ]], 
+                                mavenCoordinate: [
+                                    artifactId: 'maven-project', 
+                                    groupId: 'com.example.maven-project', 
+                                    packaging: 'war', 
+                                    version: '1.1'
+                                ]
+                            ]]
+                        )
+                    }
+                }
         
-        stage('Build Docker image') {
-            steps {
-                sh '''
-                    rm -Rf webapp.war
-                    url="http://nexus:8081/repository/maven-releases/com/example/maven-project/maven-project/1.1/maven-project-1.1.war"
-                    wget $url -O ${WORKSPACE}/webapp.war
-                    docker build -t hello-world-afip:latest .
-                '''
-            }
-        }
+                stage('Build Docker image') {
+                    steps {
+                        sh '''
+                            rm -Rf webapp.war
+                            cp webapp/target/webapp.war .
+                            docker build -t hello-world-afip:latest .
+                        '''
+                    }
+                }
+            } // parallel
+        } // stage('Parallel stage')
         
         stage('Run Docker container') {
             steps {
