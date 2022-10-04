@@ -33,7 +33,7 @@ pipeline {
         
         stage('Build Docker image') {
             steps {
-                sh(script: '''
+                sh '''
                     rm -Rf webapp.war
                     wget http://nexus:8081/repository/maven-releases/com/example/maven-project/maven-project/1.1/maven-project-1.1.war -O ${WORKSPACE}/webapp.war
                     docker build -t hello-world-afip:latest .
@@ -43,16 +43,14 @@ pipeline {
         
         stage('Run Docker container') {
             steps {
-                script {
-                    def set_container = sh(script: '''
-                        CONTAINER_NAME="hello-world-run"
-                        OLD="$(docker ps --all --quiet --filter=name="$CONTAINER_NAME")"
-                        if [ -n "$OLD" ]; then
-                            docker rm -f $OLD
-                        fi
-                        docker run -d --name hello-world-run -p 18090:8080 hello-world-afip
-                    ''')
-                }
+                sh '''
+                    CONTAINER_NAME="hello-world-run"
+                    OLD="$(docker ps --all --quiet --filter=name="$CONTAINER_NAME")"
+                    if [ -n "$OLD" ]; then
+                        docker rm -f $OLD
+                    fi
+                    docker run -d --name hello-world-run -p 18090:8080 hello-world-afip
+                ''')
             }
         }
 
