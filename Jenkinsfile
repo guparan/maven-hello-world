@@ -38,6 +38,10 @@ pipeline {
         stage('Parallel stage 2') {
             parallel {
                 stage('Push webapp to Nexus') {
+                    parameters {
+                      string(name: 'commitHash', description: 'Commit hash', defaultValue: "${env.GIT_COMMIT}")
+                      string(name: 'buildNum', description: 'Build number', defaultValue: "${env.BUILD_NUMBER}")
+                    }
                     steps {
                         nexusPublisher(
                             nexusInstanceId: 'Nexus', 
@@ -53,7 +57,7 @@ pipeline {
                                     artifactId: 'maven-project', 
                                     groupId: 'com.example.maven-project', 
                                     packaging: 'war', 
-                                    version: '1.4'
+                                    version: '${commitHash}'
                                 ]
                             ]]
                         )
