@@ -84,6 +84,23 @@ pipeline {
                 '''
             }
         }
+        
+        stage('Load testing with JMeter') {
+            steps {
+                sh '''
+                    jmeter \
+                        -Jjmeter.save.saveservice.output_format=xml \
+                        -Jjmeter.save.saveservice.response_data.on_error=true \
+                        -n -t JMeterTestPlan.jmx  \
+                        -l testresult.jlt
+                '''
+                perfReport(
+                    filterRegex: '', 
+                    showTrendGraphs: true, 
+                    sourceDataFiles: 'testresult.jlt'
+                )
+            }
+        }
 
     } // stages
 } // pipeline
