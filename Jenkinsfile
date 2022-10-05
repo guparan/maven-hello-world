@@ -107,6 +107,19 @@ pipeline {
                 )
             }
         }
+        
+        stage('Run AWX job install_docker') {
+            steps {
+                ansibleTower(
+                    jobTemplate: 'install_docker', 
+                    jobType: 'run', 
+                    throwExceptionWhenFail: false, 
+                    towerCredentialsId: '9eb8eb3d-867b-43a7-9127-9640a2d10454', 
+                    towerLogLevel: 'false', 
+                    towerServer: 'AWX'
+                )
+            }
+        }
 
     } // stages
 } // pipeline
