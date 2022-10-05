@@ -96,6 +96,7 @@ pipeline {
                 '''
                 logParser(
                     failBuildOnError: true, 
+                    parsingRulesPath: '',
                     projectRulePath: 'parserules',
                     useProjectRule: true
                 )
