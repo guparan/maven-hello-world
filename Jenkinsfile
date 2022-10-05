@@ -113,9 +113,10 @@ pipeline {
                 ansibleTower(
                     jobTemplate: 'install_docker', 
                     jobType: 'run', 
+                    removeColor: true,
                     throwExceptionWhenFail: false, 
                     towerCredentialsId: '9eb8eb3d-867b-43a7-9127-9640a2d10454', 
-                    towerLogLevel: 'false', 
+                    towerLogLevel: 'full', 
                     towerServer: 'AWX'
                 )
             }
