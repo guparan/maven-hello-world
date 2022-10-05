@@ -94,6 +94,11 @@ pipeline {
                         -n -t JMeterTestPlan.jmx  \
                         -l testresult.jlt
                 '''
+                logParser(
+                    failBuildOnError: true, 
+                    projectRulePath: 'parserules',
+                    useProjectRule: true
+                )
                 perfReport(
                     filterRegex: '', 
                     showTrendGraphs: true, 
